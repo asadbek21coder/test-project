@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"net"
 	"service-1/config"
 	"service-1/grpc"
 	"service-1/pkg/logger"
+	"service-1/storage/postgres"
 )
 
 func main() {
@@ -24,20 +26,19 @@ func main() {
 	log := logger.NewLogger(cfg.ServiceName, loggerLevel)
 	defer logger.Cleanup(log)
 
-	// pgStore, err := postgres.NewPostgres(fmt.Sprintf(
-	// 	"postgres://%s:%s@%s:%d/%s?sslmode=disable",
-	// 	cfg.PostgresUser,
-	// 	cfg.PostgresPassword,
-	// 	cfg.PostgresHost,
-	// 	cfg.PostgresPort,
-	// 	cfg.PostgresDatabase,
-	// ), cfg)
-	// if err != nil {
-	// 	panic(err)
-	// }
+	pgStore, err := postgres.NewPostgres(fmt.Sprintf(
+		"postgres://%s:%s@%s:%d/%s?sslmode=disable",
+		cfg.PostgresUser,
+		cfg.PostgresPassword,
+		cfg.PostgresHost,
+		cfg.PostgresPort,
+		cfg.PostgresDatabase,
+	), cfg)
+	if err != nil {
+		panic(err)
+	}
 
-	grpcServer := grpc.SetUpServer(cfg, log)
-	// , pgStore
+	grpcServer := grpc.SetUpServer(cfg, log, pgStore)
 	lis, err := net.Listen("tcp", cfg.GRPCPort)
 	if err != nil {
 		panic(err)
