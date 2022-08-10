@@ -87,6 +87,11 @@ func (r *service_2_Repo) GetAll(ctx context.Context, req *pb.GetAllRequest) (*pb
 
 func (r *service_2_Repo) GetById(ctx context.Context, entity *pb.Id) (*pb.Post, error) {
 	var resp pb.Post
+	row1 := r.db.QueryRow(ctx, "select exists (select id from posts where id=$1) as output", entity.Id)
+	var exists bool
+	if row1.Scan(&exists); !exists {
+		return nil, fmt.Errorf("checking DB: %w", errors.New("no such id"))
+	}
 
 	query := `SELECT * FROM posts WHERE id=$1`
 

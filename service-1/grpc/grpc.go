@@ -1,12 +1,11 @@
 package grpc
 
 import (
-	"service-1/config"
-	"service-1/genproto/service_1"
-	"service-1/grpc/service"
-	"service-1/pkg/logger"
-	"service-1/storage"
-
+	"github.com/asadbek21coder/test-project/service-1/config"
+	"github.com/asadbek21coder/test-project/service-1/genproto/service_1"
+	"github.com/asadbek21coder/test-project/service-1/grpc/service"
+	"github.com/asadbek21coder/test-project/service-1/pkg/logger"
+	"github.com/asadbek21coder/test-project/service-1/storage"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )

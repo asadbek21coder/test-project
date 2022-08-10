@@ -3,7 +3,8 @@ package storage
 import (
 	"context"
 	"errors"
-	pb "service-1/genproto/service_1"
+
+	pb "github.com/asadbek21coder/test-project/service-1/genproto/service_1"
 )
 
 var ErrorTheSameId = errors.New("cannot use the same uuid for 'id' and 'parent_id' fields")

@@ -7,10 +7,11 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	pb "service-1/genproto/service_1"
-	"service-1/storage"
 
+	"github.com/asadbek21coder/test-project/service-1/storage"
 	"github.com/jackc/pgx/v4/pgxpool"
+
+	pb "github.com/asadbek21coder/test-project/service-1/genproto/service_1"
 )
 
 type service_1_Repo struct {
@@ -59,7 +60,6 @@ func (r *service_1_Repo) GetAll(ctx context.Context) (*pb.Status, error) {
 		if i == 1 {
 			url = url[:len(url)-7]
 		}
-		fmt.Println(url)
 		response, err := http.Get(url)
 		if err != nil {
 			return &pb.Status{
@@ -73,7 +73,6 @@ func (r *service_1_Repo) GetAll(ctx context.Context) (*pb.Status, error) {
 		}
 		var data Response
 		json.Unmarshal(responseData, &data)
-		fmt.Println(data)
 
 		for _, v := range data.Data {
 

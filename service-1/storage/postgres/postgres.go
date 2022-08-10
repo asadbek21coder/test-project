@@ -2,9 +2,9 @@ package postgres
 
 import (
 	"context"
-	"service-1/config"
-	"service-1/storage"
 
+	"github.com/asadbek21coder/test-project/service-1/config"
+	"github.com/asadbek21coder/test-project/service-1/storage"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 

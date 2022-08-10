@@ -2,12 +2,12 @@ package service
 
 import (
 	"context"
-	"service-1/config"
-	pb "service-1/genproto/service_1"
-	"service-1/pkg/logger"
-	"service-1/storage"
 
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
+	"github.com/asadbek21coder/test-project/service-1/config"
+	pb "github.com/asadbek21coder/test-project/service-1/genproto/service_1"
+	"github.com/asadbek21coder/test-project/service-1/pkg/logger"
+	"github.com/asadbek21coder/test-project/service-1/storage"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type service_1 struct {

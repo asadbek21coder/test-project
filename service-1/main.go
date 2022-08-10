@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 	"net"
-	"service-1/config"
-	"service-1/grpc"
-	"service-1/pkg/logger"
-	"service-1/storage/postgres"
+
+	"github.com/asadbek21coder/test-project/service-1/config"
+	"github.com/asadbek21coder/test-project/service-1/grpc"
+	"github.com/asadbek21coder/test-project/service-1/pkg/logger"
+	"github.com/asadbek21coder/test-project/service-1/storage/postgres"
 )
 
 func main() {
