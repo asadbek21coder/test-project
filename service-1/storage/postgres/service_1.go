@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
+	"sync"
 
 	"github.com/asadbek21coder/test-project/service-1/storage"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -53,40 +53,54 @@ func NewService_1_Repo(db *pgxpool.Pool) storage.Service_1_I {
 	}
 }
 
-func (r *service_1_Repo) GetAll(ctx context.Context) (*pb.Status, error) {
+var errorResponse error
 
-	for i := 1; i <= 50; i++ {
+var waitgroup sync.WaitGroup
+
+func (r *service_1_Repo) GetAll(ctx context.Context) (*pb.Status, error) {
+	for i := 1; i < 50; i = i + 10 {
+		go getter(r, ctx, i, i+9)
+		waitgroup.Add(1)
+	}
+	waitgroup.Wait()
+
+	if errorResponse != nil {
+		return nil, errorResponse
+	} else {
+		return &pb.Status{
+			Status: string("OK"),
+		}, nil
+	}
+
+}
+func getter(r *service_1_Repo, ctx context.Context, start, end int) {
+	defer waitgroup.Done()
+
+	for i := start; i <= end; i++ {
 		url := "https://gorest.co.in/public/v1/posts?page=" + fmt.Sprint(i)
 		if i == 1 {
 			url = url[:len(url)-7]
 		}
 		response, err := http.Get(url)
 		if err != nil {
-			return &pb.Status{
-				Status: string(err.Error()),
-			}, nil
+			errorResponse = err
 		}
 
 		responseData, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			log.Fatal(err)
+			errorResponse = err
 		}
 		var data Response
 		json.Unmarshal(responseData, &data)
-
 		for _, v := range data.Data {
-
 			query := `INSERT into posts (id,user_id, title,body) VALUES ($1,$2,$3,$4)`
 
 			_, err := r.db.Exec(ctx, query, v.Id, v.UserId, v.Title, v.Body)
 			if err != nil {
-				return nil, fmt.Errorf("error while inserting attribute err: %w", err)
+				errorResponse = err
 			}
+
 		}
+
 	}
-
-	return &pb.Status{
-		Status: string("OK"),
-	}, nil
-
 }
